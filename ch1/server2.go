@@ -2,30 +2,30 @@
 package main
 
 import (
-    "fmt"
-    "net/http"
-    "sync"
-    "log"
+	"fmt"
+	"log"
+	"net/http"
+	"sync"
 )
 
 var mu sync.Mutex
 var counter int
 
 func main() {
-    http.HandleFunc("/", handler)
-    http.HandleFunc("/count", count)
-    log.Fatal(http.ListenAndServe("localhost:8080", nil))
+	http.HandleFunc("/", handler)
+	http.HandleFunc("/count", count)
+	log.Fatal(http.ListenAndServe("localhost:8080", nil))
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
-    mu.Lock()
-    counter++
-    mu.Unlock()
-    fmt.Fprintf(w, "URL.Path = %q\n", r.URL.Path)
+	mu.Lock()
+	counter++
+	mu.Unlock()
+	fmt.Fprintf(w, "URL.Path = %q\n", r.URL.Path)
 }
 
 func count(w http.ResponseWriter, r *http.Request) {
-    mu.Lock()
-    fmt.Fprintf(w, "counter = %d\n", counter)
-    mu.Unlock()
+	mu.Lock()
+	fmt.Fprintf(w, "counter = %d\n", counter)
+	mu.Unlock()
 }
